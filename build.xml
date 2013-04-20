@@ -1,0 +1,56 @@
+<?xml version="1.0" ?> 
+<project name="${dir.modFloder}">
+	
+	<property file="build.properties" />
+	
+	<target name="clean">
+		<delete file="${dir.development}\${dir.mcp}\src\minecraft\mcmod.info" />
+		<delete dir="${dir.development}\${dir.mcp}\src\minecraft\${dir.modPackege}" />
+		<delete dir="${dir.development}\${dir.mcp}\src\minecraft\com" />
+		<delete dir="${dir.development}\${dir.mcp}\reobf\minecraft" />
+	</target>
+	
+	<target name="build">
+		<copy todir="${dir.development}\${dir.mcp}\src\minecraft">
+			<fileset dir="${dir.development}\source\${dir.modFloder}\${dir.src}" />
+		</copy>
+		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@VERSION@" value="${release.mod.majorVersion}.${release.mod.minorVersion}.${release.mod.revision}" />
+	</target>
+	
+	<target name="recompile">
+		<exec dir="${dir.development}\${dir.mcp}" executable="cmd" osfamily="windows">
+			<arg line="/c recompile.bat" />
+		</exec>
+		<exec dir="${dir.development}\${dir.mcp}" executable="bash" osfamily="unix">
+			<arg line="recompile.sh" />
+		</exec>
+	</target>
+	
+	<target name="reobfuscate">
+		<exec dir="${dir.development}\${dir.mcp}" executable="cmd" osfamily="windows">
+			<arg line="/c reobfuscate_srg.bat" />
+		</exec>
+		<exec dir="${dir.development}\${dir.mcp}" executable="bash" osfamily="unix">
+			<arg line="reobfuscate_srg.sh" />
+		</exec>
+	</target>
+	
+	<target name="release">
+		<!-- Prep for the release -->
+		<antcall target="clean" />
+		<antcall target="build" />
+		<antcall target="recompile" />		
+		<antcall target="reobfuscate" />
+		
+		<!-- Build the jar -->
+		<mkdir dir="${dir.release}" />
+		<jar destfile="${dir.release}\ServerMod-${release.mod.majorVersion}.${release.mod.minorVersion}.${release.mod.revision}.jar">
+			<fileset dir="${dir.development}\${dir.mcp}\src\minecraft\" includes="mcmod.info" />
+			<fileset dir="${dir.development}\${dir.mcp}\reobf\minecraft\" />
+		</jar>
+			
+	<!-- Clean up the MCP source now that we are done -->
+		<antcall target="clean" />
+	</target>
+	
+</project>

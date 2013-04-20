@@ -5,11 +5,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import us.ringos_house.ServerKey.Shared.Strings;
-import us.ringos_house.ServerKey.Validation.ClientValidation;
-
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import us.ringos_house.ServerKey.Shared.Config;
+import us.ringos_house.ServerKey.Shared.Strings;
+import us.ringos_house.ServerKey.Validation.ClientValidation;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -27,8 +29,16 @@ public class PacketHandler implements IPacketHandler
 			DataInputStream stream = new DataInputStream(streamByte);
 			try
 			{
-				//Tell the server to validate the message
-				ClientValidation.Validate(stream.readUTF());
+				if(FMLCommonHandler.instance().getSide().isClient())
+				{
+					SendValidation(Config.ServerKey);
+				}
+				else
+				{
+					EntityPlayerMP ePlayer = (EntityPlayerMP)player;
+					//Tell the server to validate the message
+					ClientValidation.Validate(stream.readUTF(), ePlayer);
+				}
 			}
 			finally
 			{
@@ -44,7 +54,7 @@ public class PacketHandler implements IPacketHandler
 		}
 	}
 	
-	public void SendValidation(String myServerKey)
+	public static void SendValidation(String myServerKey)
 	{
 		try
 		{

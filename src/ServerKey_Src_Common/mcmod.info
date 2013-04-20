@@ -1,0 +1,17 @@
+[
+{
+  "modid": "ServerKey",
+  "name": "ServerKey",
+  "description": "Keep your players on the right ModPack Versions",
+  "credits": "By KitKat for ChipUK",
+  "logoFile": "",
+  "version": "@VERSION@",
+  "url": "https://github.com/KitKat31337/ServerKey",
+  "updateUrl": "",
+  "authors": [ "KitKat", "captain_shadows", "Dries007" ],
+  "screenshots": [ "" ],
+  "dependencies": [
+     "required-after:Forge@[7.7.1.650,)"
+  ]
+}
+]

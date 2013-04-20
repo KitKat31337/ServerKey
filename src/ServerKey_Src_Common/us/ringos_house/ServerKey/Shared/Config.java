@@ -10,7 +10,7 @@ public class Config
 	public static String ServerKey = "P@ssW0rd";
 	
 	//Server Config Items
-	public static String KickMessage = "Your installation does not match the server.  Please contact a server operator.";
+	public static String KickMessage = "&5ServerKey Validation Failed.  Contact your server operator.";
 	
 	public static void init(FMLPreInitializationEvent event) 
 	{
@@ -21,20 +21,29 @@ public class Config
 
 	private static void InitializeConfig(Configuration config) 
 	{
-		config.addCustomCategoryComment(Strings.category, "Options for ServerKey Mod");
-		ServerKey = config.get(
-				Strings.category, 
-				Strings.serverKey, 
-				ServerKey, 
-				"The key to validate.  Enter any string such as a password or version").getString();
-		
 		if (FMLCommonHandler.instance().getSide().isServer())
 		{
+			config.addCustomCategoryComment(Strings.ServerCategory, "Options for ServerKey Mod");
 			KickMessage = config.get(
-					Strings.category,
+					Strings.ServerCategory,
 					Strings.kickMessage,
 					KickMessage,
-					"The message to give players when validation fails.").getString();
+					"The message to give players when validation fails.\n" +
+					"Use colors by &<color Code> (http://www.minecraftwiki.net/wiki/Formatting_codes)").getString();
+			ServerKey = config.get(
+					Strings.ServerCategory, 
+					Strings.serverKey, 
+					ServerKey, 
+					"The key to validate.  Enter any string such as a password or version").getString();
+		}
+		else
+		{
+			config.addCustomCategoryComment(Strings.ClientCategory, "Options for ServerKey Mod for the client");
+			ServerKey = config.get(
+					Strings.ClientCategory, 
+					Strings.serverKey, 
+					ServerKey, 
+					"The key to validate.  Enter any string such as a password or version").getString();
 		}
 	}
 }
