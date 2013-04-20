@@ -44,7 +44,7 @@
 		
 		<!-- Build the jar -->
 		<mkdir dir="${dir.release}" />
-		<jar destfile="${dir.release}\ServerMod-${release.mod.majorVersion}.${release.mod.minorVersion}.${release.mod.revision}.jar">
+		<jar destfile="${dir.release}\ServerKey-${release.mod.majorVersion}.${release.mod.minorVersion}.${release.mod.revision}.jar">
 			<fileset dir="${dir.development}\${dir.mcp}\src\minecraft\" includes="mcmod.info" />
 			<fileset dir="${dir.development}\${dir.mcp}\reobf\minecraft\" />
 		</jar>
